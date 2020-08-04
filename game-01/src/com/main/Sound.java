@@ -39,6 +39,7 @@ public class Sound {
 	}
 	
 	public static Clips music = load("/musicBackground.wav", 1);
+	public static Clips musicMenu = load("/musicMenu.wav", 1);
 	
 	private static Clips load(String name, int count) {
 		try {

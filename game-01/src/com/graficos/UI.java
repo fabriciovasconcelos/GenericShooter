@@ -20,7 +20,7 @@ public class UI {
 		
 		g.setColor(Color.white);
 		g.setFont(Game.pixelFont);
-		g.drawString("Munição: " + Player.bullets,180,12);
+		g.drawString("Carga: " + Player.bullets,180,12);
 		
 	}
 	

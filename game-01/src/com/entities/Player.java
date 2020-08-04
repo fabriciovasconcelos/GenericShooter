@@ -89,7 +89,7 @@ public class Player extends Entity {
 			Entity atual = Game.entities.get(i);
 			if(atual instanceof Bullets) {
 				if(Entity.isCollidding(this, atual) && z==0) {
-					bullets+=10;
+					bullets+=25;
 					Game.entities.remove(atual);
 				}
 			}

@@ -24,6 +24,7 @@ public class Menu {
 	public boolean up,down, enter;
 	public static boolean pause= false, saveExist = false, saveGame = false;
 	public void tick() {
+		Sound.musicMenu.loop();
 		File file = new File ("save.txt");
 		if(file.exists()) {
 			saveExist = true;
