@@ -51,6 +51,7 @@ public class Game extends Canvas implements Runnable, KeyListener,MouseListener,
 	public static Spritesheet spritesheet;
 	public static World world;
 	public static Player player;
+	public static Npc npc;
 	public static Random random;
 	public Menu menu;
 	public static UI ui;
@@ -74,6 +75,7 @@ public class Game extends Canvas implements Runnable, KeyListener,MouseListener,
 	public BufferedImage lightmap;
 	public static BufferedImage miniMap;
 	public static int [] miniMapPixels;
+	public boolean goNextLevel = false;
 	
 	public Game() { 
 		random = new Random();
@@ -98,7 +100,9 @@ public class Game extends Canvas implements Runnable, KeyListener,MouseListener,
 		bullets = new ArrayList<BulletShoot>();
 		spritesheet = new Spritesheet("/spritesheet.png");
 		player = new Player(0, 0, 16, 16, spritesheet.getSpriteint(32, 0, 16, 16));
+		npc = new Npc(0, 0, 16, 16,spritesheet.getSpriteint(48, 48, 16, 16));
 		entities.add(player);
+		entities.add(npc);
 		world = new World("/level1.png");
 		
 		try {
@@ -204,7 +208,7 @@ public class Game extends Canvas implements Runnable, KeyListener,MouseListener,
 
 		}
 		
-		applyLight();
+		//applyLight();
 		
 		ui.render(g);
 		///***////
@@ -306,11 +310,12 @@ public class Game extends Canvas implements Runnable, KeyListener,MouseListener,
 	}
 	
 	public void nextLevel() {
-		if(Game.enemies.size() == 0) {
+		if(Game.enemies.size() == 0 && goNextLevel == true) {
 			CUR_LVL++;
 			if(CUR_LVL > MAX_LVL) {
 				CUR_LVL = 1;
 			}
+			goNextLevel = false;
 			newWorld = "level" + CUR_LVL + ".png";
 			World.restartGame(newWorld);
 			
@@ -424,7 +429,13 @@ public class Game extends Canvas implements Runnable, KeyListener,MouseListener,
 		}
 		
 		if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-			
+			if(Math.abs(player.getX() - npc.getX()) < 25 && Math.abs(player.getY() - npc.getY()) < 10) {
+				npc.show = true;
+			}if(npc.show == true && npc.showDialog) {
+				npc.show = false;
+				npc.showDialog = false;
+				goNextLevel = true;
+			}
 			if(gameState == "GAME_OVER") {
 			restartGame = true;
 			}
@@ -486,11 +497,7 @@ public class Game extends Canvas implements Runnable, KeyListener,MouseListener,
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent e) {
-
-		
-		
-	}
+	public void mouseClicked(MouseEvent e) {}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
@@ -502,16 +509,10 @@ public class Game extends Canvas implements Runnable, KeyListener,MouseListener,
 	}
 
 	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseReleased(MouseEvent e) {}
 
 	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseEntered(MouseEvent e) {}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
@@ -527,11 +528,8 @@ public class Game extends Canvas implements Runnable, KeyListener,MouseListener,
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		
 		mx = e.getX();
 		my = e.getY();
-		
 	}
-
 }
 

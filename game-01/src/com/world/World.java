@@ -12,6 +12,8 @@ import com.entities.Enemy;
 import com.entities.Entity;
 import com.entities.Gun;
 import com.entities.Heart;
+import com.entities.Npc;
+import com.entities.Particle;
 import com.entities.Player;
 import com.graficos.Spritesheet;
 import com.main.Game;
@@ -43,6 +45,7 @@ public class World {
 					int pixelVerde = 0xFF00FF21;
 					int pixelAreia = 0xFFFF5D00;
 					int pixelCacto = 0xFF007F0E;
+					int pixelRatNpc = 0xFFFF00DC;
 					if(Game.newWorld.equals("") ||Game.newWorld.equals("level1.png") )
 						tiles[xx+ (yy * map.getWidth())] = new FloorTile(xx*16, yy*16, Tile.TILE_FLOOR);
 					 if(Game.newWorld.equals("level2.png")) 
@@ -81,12 +84,39 @@ public class World {
 						}else if (pixelAtual == pixelCacto) {
 							tiles[xx+ (yy * map.getWidth())] = new WallTile(xx*16, yy*16, Tile.TILE_CACTO);
 						}
+						else if(pixelAtual == pixelRatNpc) {
+							Game.npc.setX(xx * 16);
+							Game.npc.setY(yy * 16);
+						}
 
 				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static void generatedParticles(int amount, double x, double y) {
+		for (int i = 0; i <amount; i++) {
+			Game.entities.add(new Particle((int)x,(int)y,1,1, null));
+		}
+	}
+	
+	public static boolean isFreeDynamic(int xnext,  int ynext, int width, int height) {
+		int x1 = xnext / TILE_SIZE;
+		int y1 = ynext / TILE_SIZE;
+		int x2 = (xnext +TILE_SIZE -1) / TILE_SIZE;
+		int y2 = ynext / TILE_SIZE;
+
+		int x3 = xnext / TILE_SIZE;
+		int y3 = (ynext +height -1) / TILE_SIZE;
+
+		int x4 = (xnext +width -1) / TILE_SIZE;
+		int y4 = (ynext +height -1)/ TILE_SIZE;
+		return !((tiles[x1 +(y1*World.WIDTH)]instanceof WallTile ||
+				tiles[x2 +(y2*World.WIDTH)]instanceof WallTile  ||
+				tiles[x3 +(y3*World.WIDTH)]instanceof WallTile  ||
+				tiles[x4 +(y4*World.WIDTH)]instanceof WallTile ));
 	}
 
 	public static boolean isFree(int xnext,  int ynext, int zPlayer) {
@@ -128,7 +158,9 @@ public class World {
 		Game.enemies = new ArrayList<Enemy>();
 		Game.spritesheet = new Spritesheet("/spritesheet.png");
 		Game.player = new Player(0, 0, 16, 16,Game.spritesheet.getSpriteint(32, 0, 16, 16));
+		Game.npc = new Npc(0, 0, 16, 16, Game.spritesheet.getSpriteint(48, 48, 16, 16));
 		Game.entities.add(Game.player);
+		Game.entities.add(Game.npc);
 		Game.world = new World("/" + level);
 	}
 	

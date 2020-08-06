@@ -1,5 +1,5 @@
-level:;
-life:;::
-positionX:<=>
-positionY:<BB
-bullets:A?
+level:<
+life:A?
+positionX:<>>
+positionY:<>B
+bullets:=C
